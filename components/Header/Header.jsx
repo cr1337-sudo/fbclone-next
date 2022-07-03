@@ -7,11 +7,18 @@ import {
   ShoppingCartIcon,
   UserGroupIcon,
 } from "@heroicons/react/outline";
+import {
+  ChatIcon,
+  ChevronDownIcon,
+  ViewGridIcon,
+} from "@heroicons/react/solid";
 import HeaderIcon from "./HeaderIcon";
+import { signOut, useSession } from "next-auth/react";
 
 const Header = () => {
+  const { data: session } = useSession();
   return (
-    <div className="flex items-center sticky top-0 z-50 bg-white p-2 lg:px-5 shadow-md ">
+    <div className="flex items-center  sticky top-0 z-50 bg-white p-2 lg:px-5 shadow-md ">
       {/* Left */}
       <div className="flex items-center ">
         <Image
@@ -40,6 +47,22 @@ const Header = () => {
         </div>
       </div>
       {/* Right */}
+      <div className="flex items-center sm:space-x-2 justify-end">
+        <Image
+          onClick={signOut}
+          className="rounded-full cursor-pointer"
+          src={session?.user.image}
+          width={40}
+          height={40}
+          layout="fixed"
+        />
+        <p className="whitespace-nowrap font-semibold pr-3">
+          {session?.user.name}
+        </p>
+        <ViewGridIcon className="icon" />
+        <ChatIcon className="icon" />
+        <ChevronDownIcon className="icon" />
+      </div>
     </div>
   );
 };

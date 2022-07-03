@@ -1,7 +1,12 @@
 import Head from "next/head";
 import Header from "../components/Header/Header";
+import Login from "../components/Auth/Login";
+import Sidebar from "../components/Main/Sidebar";
+import Feed from "../components/Feed/Feed";
+import { getSession } from "next-auth/react";
 
-export default function Home() {
+export default function Home({ session }) {
+  if (!session) return <Login />;
   return (
     <div>
       <Head>
@@ -11,7 +16,22 @@ export default function Home() {
       </Head>
 
       <Header />
-      <main></main>
+      <main className="flex">
+        <Sidebar />
+        <Feed />
+      </main>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  //GET the user
+  //getSession busca dentro del context los datos del usuario
+  //SI no los encuentra retorna NULL
+  const session = await getSession(context);
+  return {
+    props: {
+      session,
+    },
+  };
 }
