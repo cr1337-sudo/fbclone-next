@@ -1,7 +1,7 @@
 import Image from "next/image";
 const FeedStoryCard = ({ name, src, profile }) => {
   return (
-    <div className="relative h-14 w-14 md:h-20 md:w-20 lg:h-56 lg:w-32 cursor-pointer p-3">
+    <div className="relative h-14 w-14 md:h-20 md:w-20 lg:h-56 lg:w-32 cursor-pointer p-3 hover:scale-105 ease-in-out transition-all duration-75">
       <Image
         className="absolute opacity-0 lg:opacity-100 rounded-full z-50 top-10"
         src={profile}

@@ -5,8 +5,9 @@ import Sidebar from "../components/Main/Sidebar";
 import Feed from "../components/Feed/Feed";
 import Widgets from "../components/Feed/FeedWidgets";
 import { getSession } from "next-auth/react";
+import { db } from "../firebase";
 
-export default function Home({ session }) {
+export default function Home({ session, posts }) {
   if (!session) return <Login />;
   return (
     <div>
@@ -19,7 +20,7 @@ export default function Home({ session }) {
       <Header />
       <main className="flex">
         <Sidebar />
-        <Feed />
+        <Feed posts={posts} />
         <Widgets />
       </main>
     </div>
@@ -31,9 +32,17 @@ export async function getServerSideProps(context) {
   //getSession busca dentro del context los datos del usuario
   //SI no los encuentra retorna NULL
   const session = await getSession(context);
+
+  const posts = await db.collection("posts").orderBy("timestamp", "desc").get();
+  const docs = posts.docs.map((post) => ({
+    id: post.id,
+    ...post.data(),
+    timestamp: null,
+  }));
   return {
     props: {
       session,
+      posts: docs,
     },
   };
 }
